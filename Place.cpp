@@ -1,5 +1,6 @@
 #include <iostream>
 #include <iomanip>
+#include <cstdlib>
 
 #include "Place.hpp"
 
@@ -13,6 +14,7 @@ Place creerPlaceVide(Coord c){
     p.nid = false;
     p.pheroNid = -1;
     p.pheroSucre = -1;
+    return p;
 }
 
 
@@ -49,7 +51,6 @@ bool surUnePistePlace(Place p){
     else {
         cout << "ERREUR : Fonction surUnePistePlace --> pheroSucre" << endl;
         exit(1);
-        return false;
     }
 }
 
@@ -58,3 +59,63 @@ void poserSucre(Place &p){
     p.sucre = true;
 }
 
+void poserNid(Place &p){
+    p.nid = true;
+}
+
+void poserFourmi(Fourmi &f, Place &p){
+    f.c = p.c;
+    p.fourmi = f.indice;
+}
+
+void enleverFourmi(Place &p){
+    p.fourmi = -1;
+}
+
+void poserPheroNid(Place &p, float intensite){
+    p.pheroNid = intensite;
+}
+
+void poserPheroSucre(Place &p){
+    p.pheroSucre = 255;
+}
+
+void diminuerPheroSucre(Place &p){
+    if(p.pheroSucre > 0)
+        p.pheroSucre = p.pheroSucre - 5;
+}
+
+
+void deplacerFourmi(Fourmi &f, Place &p1, Place &p2){
+    if(p2.fourmi == -1){
+        f.c = p2.c;
+        p1.fourmi = -1;
+        p2.fourmi = f.indice;
+    } else {
+        cout << "ERREUR : deplacerFourmi : Une fourmi est deja sur la place de déplacement " << endl;
+        exit(1);
+    }
+}
+
+
+bool estVidePlace(Place p){
+    if(p.fourmi == -1){
+        return p.nid && p.sucre;
+    } else {
+        return false;
+    }
+}
+
+bool plusProcheNid(Place p1, Place p2){
+    if(p1.pheroNid > p2.pheroNid)
+        return true;
+    else
+        return false;
+}
+
+bool plusLoinNid(Place p1, Place p2){
+    if(p1.pheroNid < p2.pheroNid)
+        return false;
+    else
+        return true;
+}

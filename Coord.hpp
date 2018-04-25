@@ -1,7 +1,6 @@
 #ifndef COORD_HPP_INCLUDED
 #define COORD_HPP_INCLUDED
 
-
 const int TAILLE = 5;
 const int MAXENSCOORD = TAILLE * TAILLE;
 
@@ -32,6 +31,7 @@ void ajouteEnsCoord(EnsCoord &ec, Coord c);
 void supprimeEnsCoord(EnsCoord &ec, Coord c);
 EnsCoord voisines(Coord c);
 Coord choixCoordHasard(EnsCoord ec);
+
 void testCoord();
 
 
