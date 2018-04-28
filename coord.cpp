@@ -47,7 +47,7 @@ Coord nouvCoord(int lig, int col){
 }
 
 void afficheCoord(Coord aff){
-	cout << "c = (" << aff.ligne << ", " << aff.colonne << ")";
+	cout << "c = (" << aff.ligne << ", " << aff.colonne << ")" << endl;
 }
 
 bool egalCoord(Coord c1, Coord c2){
@@ -60,20 +60,19 @@ bool egalCoord(Coord c1, Coord c2){
 void testEgalCoord(){
 	ASSERT(egalCoord(nouvCoord(2, 2), nouvCoord(2, 2)));
 	ASSERT(egalCoord(nouvCoord(0, 0), nouvCoord(0, 0)));
-
 	ASSERT(not egalCoord(nouvCoord(2, 1), nouvCoord(2, 0)));
 	ASSERT(not egalCoord(nouvCoord(0, 0), nouvCoord(0 , 2)));
 	ASSERT(not egalCoord(nouvCoord(0, 0), nouvCoord(0 , 2)));
 	ASSERT(not egalCoord(nouvCoord(0, 0), nouvCoord(2 , 0)));
-	ASSERT(not egalCoord(nouvCoord(0, 2), nouvCoord(0 , 0)));
-	ASSERT(not egalCoord(nouvCoord(2, 0), nouvCoord(0 , 0)));
+	ASSERT(not egalCoord(nouvCoord(10, 9), nouvCoord(9 , 10)));
+	ASSERT(not egalCoord(nouvCoord(2, 0), nouvCoord(0 , 2)));
 }
 
 int rechercheCoordEnsCoord(EnsCoord ec, Coord c){
 	for(int i = 0; i < ec.nbElts; i++){
 		if(egalCoord(c, ec.tab[i]))
 			return i;
-	}
+    }
 	return -1;
 }
 
@@ -194,10 +193,10 @@ void testCoord(){
 	Coord p;
 
 
-	while(true){
+	//while(true){
 		p = choixCoordHasard(exemple);
 		cout << "p = ";
 		afficheCoord(p);
 		cout << endl;
-	}
+	//}
 }

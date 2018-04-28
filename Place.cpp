@@ -6,6 +6,9 @@
 
 using namespace std;
 
+#define ASSERT(test) if (!(test)) cout << "Test failed in file " << __FILE__ \
+                                       << " line " << __LINE__ << ": " #test << endl
+
 Place creerPlaceVide(Coord c){
     Place p;
     p.c = c;
@@ -46,7 +49,7 @@ bool contientNidPlace(Place p){
 bool surUnePistePlace(Place p){
     if(p.pheroSucre == -1)
         return false;
-    else if(p.pheroSucre >= 0)
+    else if(p.pheroSucre >= 0 && p.pheroSucre <= 255)
         return true;
     else {
         cout << "ERREUR : Fonction surUnePistePlace --> pheroSucre" << endl;
@@ -99,8 +102,8 @@ void deplacerFourmi(Fourmi &f, Place &p1, Place &p2){
 
 
 bool estVidePlace(Place p){
-    if(p.fourmi == -1){
-        return p.nid && p.sucre;
+    if(p.fourmi == -1 && not p.nid && not p.sucre){
+        return true;
     } else {
         return false;
     }
@@ -118,4 +121,40 @@ bool plusLoinNid(Place p1, Place p2){
         return false;
     else
         return true;
+}
+
+void testPlace(){
+    Coord c;
+    c.colonne = 10;
+    c.ligne = 10;
+
+    Place p = creerPlaceVide(c);
+    ASSERT(egalCoord(c, coordPlace(p)));
+    ASSERT(estVidePlace(p));
+
+    ASSERT(pheroNidPlace(p) == -1);
+    ASSERT(pheroSucrePlace(p) == -1);
+    poserPheroSucre(p);
+    ASSERT(pheroSucrePlace(p) == 255);
+    diminuerPheroSucre(p);
+    ASSERT(pheroSucrePlace(p) == 250);
+
+    ASSERT(not contientNidPlace(p));
+    ASSERT(not contientSucrePlace(p));
+    poserNid(p);
+    ASSERT(contientNidPlace(p));
+    poserSucre(p);
+    ASSERT(contientSucrePlace(p));
+
+    poserPheroNid(p, 0.2);
+    surUnePistePlace(p);
+
+    Coord q;
+    q.colonne = 20;
+    q.ligne = 20;
+    Fourmi f = creerFourmi(q, 2);
+    poserFourmi(f, p);
+    ASSERT(p.fourmi == 2);
+    ASSERT(egalCoord(f.c, c));
+
 }

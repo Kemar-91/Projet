@@ -9,6 +9,8 @@ using namespace std;
 
 int main(){
     //testCoord();
+    testFourmi();
+    testPlace();
     cout << "OK" << endl;
     return 0;
 }

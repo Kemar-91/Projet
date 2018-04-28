@@ -3,7 +3,7 @@
 
 #include "Coord.hpp"
 
-const int NBFOURMI = 0;
+const int NBFOURMI = 12;
 
 struct Fourmi{
     Coord c;
@@ -11,7 +11,10 @@ struct Fourmi{
     bool sucre, nid;
 };
 
-
+struct ensFourmi{
+    Fourmi fourmi[NBFOURMI];
+    int nbElts = 0;
+};
 
 
 Fourmi creerFourmi(Coord c, int indice);
@@ -25,5 +28,9 @@ bool rentreNid(Fourmi f);
 void dechargerSucre(Fourmi &f);
 void chargerSucre(Fourmi &f);
 void deplaceFourmi(Fourmi &f, Coord c);
+
+void chargerTabFourmis(ensFourmi &tabFourmis, EnsCoord ec);
+
+void testFourmi();
 
 #endif // FOURMI_HPP_INCLUDED

@@ -25,7 +25,7 @@ bool surUnePistePlace(Place p);
 
 void poserSucre(Place &p);
 void poserNid(Place &p);
-void poserFourmi(Fourmi f, Place &p);
+void poserFourmi(Fourmi &f, Place &p);
 void enleverFourmi(Place &p);
 void poserPheroNid(Place &p, float intensite);
 void poserPheroSucre(Place &p);
@@ -36,5 +36,7 @@ void deplacerFourmi(Fourmi &f, Place &p1, Place &p2);
 bool estVidePlace(Place p);
 bool plusProcheNid(Place p1, Place p2);
 bool plusLoinNid(Place p1, Place p2);
+
+void testPlace();
 
 #endif // PLACE_HPP_INCLUDED
