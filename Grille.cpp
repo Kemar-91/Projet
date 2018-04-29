@@ -16,7 +16,6 @@ void chargerGrilleVide(Grille &g){
             col = 1;
         }
         c = nouvCoord(lign, col);
-        afficheCoord(c);
         g.listePlace[i]= creerPlaceVide(c);
         g.listePlace[i].pheroNid = 0;
         col ++;
@@ -77,14 +76,12 @@ void lineariserPheroNid(Grille &g){
 
 }
 
-Grille initialiserGrille(ensFourmi ef, EnsCoord sucre, EnsCoord nid){
-    Grille g;
+void initialiserGrille(Grille &g, ensFourmi ef, EnsCoord sucre, EnsCoord nid){
     chargerGrilleVide(g);
     placerSucre(g, sucre);
     placerNid(g, nid);
     placerFourmi(g, ef);
     lineariserPheroNid(g);
-    return g;
 }
 
 void diminuerPheroSucreGrille(Grille &g){
@@ -116,4 +113,6 @@ void afficheGrille(Grille g){
         cout << " | ";
 
     }
+
+    cout << endl << endl;
 }

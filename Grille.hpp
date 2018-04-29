@@ -25,7 +25,7 @@ void placerFourmi(Grille &g, ensFourmi ef);
 
 void lineariserPheroNid(Grille &g);
 
-Grille initialiserGrille(ensFourmi ef, EnsCoord sucre, EnsCoord nid);
+void initialiserGrille(Grille &g, ensFourmi ef, EnsCoord sucre, EnsCoord nid);
 
 void diminuerPheroSucreGrille(Grille &g);
 
