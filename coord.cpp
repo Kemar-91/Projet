@@ -123,6 +123,7 @@ void supprimeEnsCoord(EnsCoord &ec, Coord c){
 EnsCoord voisines(Coord c){
 	EnsCoord ev;
 	ev = nouvEnsCoord();
+	//cout << "entre dans voisines" << endl;
 	int i_min = max(c.ligne - 1, 0);
 	int i_max = min(c.ligne + 1, TAILLE - 1);
 	int j_min = max(c.colonne - 1, 0);
@@ -131,6 +132,7 @@ EnsCoord voisines(Coord c){
 	for(int i = i_min; i <= i_max; i++){
 		for(int j = j_min; j <= j_max; j++){
 			if(not egalCoord(nouvCoord(i, j), c)){
+                //cout << "ajout" << endl;
 				ajouteEnsCoord(ev, nouvCoord(i, j));
 			}
 		}
@@ -141,6 +143,15 @@ EnsCoord voisines(Coord c){
 
 Coord choixCoordHasard(EnsCoord ec){
     return ec.tab[rand() % (ec.nbElts + 1)];;
+}
+
+int Cardinal(EnsCoord ec){
+    //cout<<ec.nbElts;
+    return ec.nbElts;
+}
+
+Coord retourneElement(EnsCoord ec, int i){
+    return ec.tab[i];
 }
 
 void testCoord(){

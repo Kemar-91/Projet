@@ -92,8 +92,8 @@ void diminuerPheroSucre(Place &p){
 void deplacerFourmi(Fourmi &f, Place &p1, Place &p2){
     if(p2.fourmi == -1){
         f.c = p2.c;
+        p2.fourmi = p1.fourmi;
         p1.fourmi = -1;
-        p2.fourmi = f.indice;
     } else {
         cout << "ERREUR : deplacerFourmi : Une fourmi est deja sur la place de déplacement " << endl;
         exit(1);

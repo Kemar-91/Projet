@@ -98,18 +98,19 @@ void afficheGrille(Grille g){
     for(int i = 0; i < NBCASE; i++){
         if(i % 20 == 0){
             cout << endl;
-            cout << "| ";
-        }
+              cout << "| ";
+          }
         if(g.listePlace[i].fourmi != -1){
-            cout << "F";
+            cout << setw(2) << g.listePlace[i].fourmi;
         } else if (g.listePlace[i].nid){
-            cout << "N";
+            cout << " N";
         } else if(g.listePlace[i].sucre){
-            cout << "S";
+            cout << " S";
         } else {
-            cout << " ";
+            cout << "  ";
         }
 
+       // cout << setw(2) << g.listePlace[i].fourmi; //affichage des pheroNid
         cout << " | ";
 
     }
