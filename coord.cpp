@@ -124,10 +124,10 @@ EnsCoord voisines(Coord c){
 	EnsCoord ev;
 	ev = nouvEnsCoord();
 	//cout << "entre dans voisines" << endl;
-	int i_min = max(c.ligne - 1, 0);
-	int i_max = min(c.ligne + 1, TAILLE - 1);
-	int j_min = max(c.colonne - 1, 0);
-	int j_max = min(c.colonne + 1, TAILLE - 1);
+	int i_min = max(c.ligne - 1, 1);
+	int i_max = min(c.ligne + 1, TAILLE);
+	int j_min = max(c.colonne - 1, 1);
+	int j_max = min(c.colonne + 1, TAILLE);
 
 	for(int i = i_min; i <= i_max; i++){
 		for(int j = j_min; j <= j_max; j++){

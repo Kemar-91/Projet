@@ -1,4 +1,5 @@
 #include <iostream>
+#include <SFML/Graphics.hpp>
 
 #include "Fourmi.hpp"
 #include "Grille.hpp"
@@ -133,24 +134,25 @@ void mettreAJourEnsFourmi(Grille &g, ensFourmi &tabF){
 
 
 int main(){
-    Grille jeu;
-    ensFourmi tabFourmis;
-    EnsCoord sucre, nid;
+      Grille jeu;
+      ensFourmi tabFourmis;
+      EnsCoord sucre, nid, voisins;
+//
+//    testglobal();
+//    int pause;
+      initialiserEmplacements(tabFourmis, sucre, nid);
+//
+      initialiserGrille(jeu, tabFourmis, sucre, nid);
+//
+      dessinerGrille(jeu);
+//
+     for(int i = 0; i < 3; i++){
+          mettreAJourUneFourmi(jeu, tabFourmis.fourmi[0]);
+          dessinerGrille(jeu);
+          diminuerPheroSucreGrille(jeu);
+     }
 
-    testglobal();
-    int pause;
-    initialiserEmplacements(tabFourmis, sucre, nid);
 
-    initialiserGrille(jeu, tabFourmis, sucre, nid);
-
-    dessinerGrille(jeu);
-
-    for(int i = 0; i < 300; i++){
-        //cin >> pause;
-        mettreAJourEnsFourmi(jeu, tabFourmis);
-        dessinerGrille(jeu);
-        diminuerPheroSucreGrille(jeu);
-    }
 
     return 0;
 }
