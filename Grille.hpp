@@ -31,4 +31,6 @@ void diminuerPheroSucreGrille(Grille &g);
 
 void afficheGrille(Grille g);
 
+void testGrille();
+
 #endif // GRILLE_HPP_INCLUDED

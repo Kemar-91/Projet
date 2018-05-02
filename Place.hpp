@@ -24,6 +24,7 @@ bool contientNidPlace(Place p);
 bool surUnePistePlace(Place p);
 
 void poserSucre(Place &p);
+void enleveSucre(Place &p);
 void poserNid(Place &p);
 void poserFourmi(Fourmi &f, Place &p);
 void enleverFourmi(Place &p);

@@ -1,5 +1,9 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include <iostream> // pour cout
+#include <iomanip> // pour setfill, setw
+#include <sstream> // pour ostringstream
+#include <fstream> // pour ofstream
+#include <string>
+#include "SFML/Graphics.hpp"
 
 #include "Fourmi.hpp"
 #include "Grille.hpp"
@@ -8,10 +12,13 @@
 
 using namespace std;
 
+const int echelle = 50;
+
 void testglobal(){
     testFourmi();
-    //testCoord();
+    testCoord();
     testPlace();
+    testGrille();
 }
 
 void initialiserEmplacements(ensFourmi &tabF,EnsCoord &sucre, EnsCoord &nid){
@@ -43,116 +50,138 @@ void initialiserEmplacements(ensFourmi &tabF,EnsCoord &sucre, EnsCoord &nid){
     chargerTabFourmis(tabF, fourmis);
 }
 
-void dessinerGrille(Grille g){
-    afficheGrille(g);
-}
+void dessinerGrille(Grille g, sf::RenderWindow &window){
+    Place p;
+    int x, y;
+    sf::RectangleShape shape(sf::Vector2f(echelle, echelle));
 
-bool condition_n(int regle, Fourmi f, Place p1, Place p2){
-    if(regle == 1){
-        return not porteSucre(f) && contientSucrePlace(p2);
-    } else if(regle == 2){
-        return rentreNid(f) && contientNidPlace(p2);
-    } else if(regle == 3){
-        return rentreNid(f) && estVidePlace(p2) && plusProcheNid(p2, p1);
-    } else if(regle == 4){
-        return not porteSucre(f) && surUnePistePlace(p1) && plusLoinNid(p2, p1) && surUnePistePlace(p2);
-    } else if(regle == 5){
-        return not porteSucre(f) && surUnePistePlace(p2) && estVidePlace(p2);
-    } else if(regle == 6){
-        return not porteSucre(f) && estVidePlace(p2);
-    } else {
-        cout << "ERREUR : Num de regle incorrecte" << endl;
-        exit(1);
-    }
-}
-
-void action_n(int regle, Fourmi &f, Place &p1, Place &p2){
-    if(regle == 1){
-        chargerSucre(f);
-        poserPheroSucre(p1);
-    } else if(regle == 2){
-        dechargerSucre(f);
-    } else if(regle == 3){
-        deplacerFourmi(f, p1, p2);
-        poserPheroSucre(p2);
-    } else if(regle == 4){
-        deplacerFourmi(f, p1, p2);
-    } else if(regle == 5){
-        deplacerFourmi(f, p1, p2);
-    } else if(regle == 6){
-        deplacerFourmi(f, p1, p2);
-    } else {
-        cout << "ERREUR : Num de regle incorrecte" << endl;
-        exit(1);
-    }
-}
-
-void mettreAJourUneFourmi(Grille &g, Fourmi &f){
-    Place p1, p2;
-    Coord c, voisins;
-    bool mvt;
-    int nbv, numVoisins, regle;
-    EnsCoord CoordV = nouvEnsCoord();
-
-    c = coordFourmis(f);
-    chargerPlace(g, c, p1);
-    regle = 1;
-    mvt = false;
-    CoordV = voisines(c);
-
-    while(regle <= 6 && not mvt){
-        //cout << regle << endl;
-        nbv = Cardinal(CoordV);
-        //cout << nbv << endl;
-        numVoisins = 0;
-
-        if(not mvt){
-            voisins = choixCoordHasard(CoordV);
-            chargerPlace(g, voisins, p2);
-
-            if(condition_n(regle, f, p1, p2)){
-                action_n(regle, f, p1, p2);
-                mvt = true;
-                rangerPlace(g, p1);
-                rangerPlace(g, p2);
+    for(int i = 0; i < NBCASE; i++){
+            chargerPlace(g, g.listePlace[i].c, p);
+            x = (p.c.colonne - 1) * echelle;
+            y = (p.c.ligne - 1) * echelle;
+            if(numFourmiPlace(p) != -1){
+                shape.setPosition(sf::Vector2f(x, y));
+                shape.setFillColor(sf::Color::Black);
+                window.draw(shape);
+            } else if(contientSucrePlace(p)){
+                shape.setPosition(sf::Vector2f(x, y));
+                shape.setFillColor(sf::Color(250, 193, 0));
+                window.draw(shape);
+            } else if(contientNidPlace(p)){
+                shape.setPosition(sf::Vector2f(x, y));
+                shape.setFillColor(sf::Color::Blue);
+                window.draw(shape);
+            } else if(p.pheroSucre > 0){
+                shape.setPosition(sf::Vector2f(x, y));
+                shape.setFillColor(sf::Color(pheroSucrePlace(p),0, 0));
+                window.draw(shape);
+            } else {
+                shape.setPosition(sf::Vector2f(x, y));
+                shape.setFillColor(sf::Color(0, p.pheroNid * 255, 0));
+                window.draw(shape);
             }
 
-        numVoisins ++;
         }
-
-    regle ++;
-    }
 }
 
-void mettreAJourEnsFourmi(Grille &g, ensFourmi &tabF){
-    Fourmi f;
-    for(int i = 0; i < tabF.nbElts; i++){
-        f = tabF.fourmi[i];
-        mettreAJourUneFourmi(g, f);
-    }
+void deplacementHasard(Grille &g, Fourmi &f){
+    EnsCoord voisins;
+    Place fourmi, dep;
+    Coord c;
+
+    chargerPlace(g, coordFourmis(f), fourmi);
+    voisins = voisines(coordPlace(fourmi));
+
+    do{
+        c = choixCoordHasard(voisins);
+        chargerPlace(g, c, dep);
+    }while(not estVidePlace(dep));
+
+    deplacerFourmi(f, fourmi, dep);
+    rangerPlace(g, fourmi);
+    rangerPlace(g, dep);
 }
 
 
 int main(){
-      Grille jeu;
-      ensFourmi tabFourmis;
-      EnsCoord sucre, nid, voisins;
-//
-//    testglobal();
-//    int pause;
+    Grille jeu;
+    ensFourmi tabFourmis;
+    EnsCoord sucre, nid, voisins;
+    Place p;
+    sf::Vector2i positionSouris;
+    int x, y;
+    Coord c;
+
+    testglobal();
+
       initialiserEmplacements(tabFourmis, sucre, nid);
 //
       initialiserGrille(jeu, tabFourmis, sucre, nid);
-//
-      dessinerGrille(jeu);
-//
-     for(int i = 0; i < 3; i++){
-          mettreAJourUneFourmi(jeu, tabFourmis.fourmi[0]);
-          dessinerGrille(jeu);
-          diminuerPheroSucreGrille(jeu);
-     }
 
+    sf::RenderWindow window(sf::VideoMode(20 * echelle, 20 * echelle), "Fourmis");
+
+
+    window.setFramerateLimit(15);
+
+    while (window.isOpen())
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+                window.close();
+
+            //GESTION EVENEMENT SOURIS : ajoute sucre
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                positionSouris = sf::Mouse::getPosition(window);
+                cout << "x = " << positionSouris.x << ", y = " << positionSouris.y << endl;
+                x = positionSouris.x;
+                y = positionSouris.y;
+                if(x >= 0 && x <= 20 * echelle && y >= 0 && y <= 20 * echelle){
+                    cout << "x/echelle = " << x/echelle << endl;
+                    x = (x / echelle) + 1;
+                    y = (y / echelle) + 1;
+                    c = nouvCoord(y, x);
+                    chargerPlace(jeu, c, p);
+                    if(not contientNidPlace(p))
+                        poserSucre(p);
+                    rangerPlace(jeu, p);
+                }
+            }
+
+            //GESTION EVENEMENT SOURIS : enleve sucre
+            if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+                positionSouris = sf::Mouse::getPosition(window);
+                cout << "x = " << positionSouris.x << ", y = " << positionSouris.y << endl;
+                x = positionSouris.x;
+                y = positionSouris.y;
+                if(x >= 0 && x <= 20 * echelle && y >= 0 && y <= 20 * echelle){
+                    cout << "x/echelle = " << x/echelle << endl;
+                    x = (x / echelle) + 1;
+                    y = (y / echelle) + 1;
+                    c = nouvCoord(y, x);
+                    chargerPlace(jeu, c, p);
+                    if(contientSucrePlace(p))
+                    enleveSucre(p);
+                    rangerPlace(jeu, p);
+                }
+            }
+        }
+
+        window.clear();
+          for(int j = 0; j < tabFourmis.nbElts; j++){
+             deplacementHasard(jeu, tabFourmis.fourmi[j]);
+          }
+
+        dessinerGrille(jeu, window);
+
+
+        window.display();
+    }
 
 
     return 0;
 }
+
+
+

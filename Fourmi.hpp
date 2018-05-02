@@ -16,7 +16,6 @@ struct ensFourmi{
     int nbElts = 0;
 };
 
-
 Fourmi creerFourmi(Coord c, int indice);
 
 Coord coordFourmis(Fourmi f);

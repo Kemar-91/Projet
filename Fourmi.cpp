@@ -7,7 +7,7 @@ using namespace std;
 #define ASSERT(test) if (!(test)) cout << "Test failed in file " << __FILE__ \
                                        << " line " << __LINE__ << ": " #test << endl
 
-
+//Constructeur
 Fourmi creerFourmi(Coord c, int indice){
     Fourmi f;
     f.c = c;
@@ -19,6 +19,7 @@ Fourmi creerFourmi(Coord c, int indice){
 }
 
 
+//ACCES
 Coord coordFourmis(Fourmi f){
     return f.c;
 }
@@ -28,6 +29,7 @@ int numFourmi(Fourmi f){
 }
 
 
+//PREDICATS
 bool porteSucre(Fourmi f){
     return f.sucre;
 }
@@ -37,6 +39,7 @@ bool rentreNid(Fourmi f){
 }
 
 
+//MODIFICATIONS
 void dechargerSucre(Fourmi &f){
     f.sucre = false;
 }
@@ -57,8 +60,9 @@ void chargerTabFourmis(ensFourmi &tabFourmis, EnsCoord ec){
 }
 
 
+//TEST
 void testFourmi(){
-    //test initialisation
+
     ensFourmi tabFourmis;
     Coord c;
     c.ligne = 0;
@@ -72,8 +76,7 @@ void testFourmi(){
     }
 
     Coord nul;
-    nul.ligne = 0;
-    nul.colonne = 0;
+    nul = nouvCoord(0, 0);
     ASSERT(egalCoord(coordFourmis(tabFourmis.fourmi[0]), nul));
 
     for(int o = 0; o < NBFOURMI; o++){
@@ -86,8 +89,8 @@ void testFourmi(){
     ASSERT(not porteSucre(tabFourmis.fourmi[0]));
 
     Coord deplace;
-    deplace.colonne = 10;
-    deplace.ligne = 200;
+    deplace = nouvCoord(200,10);
     deplaceFourmi(tabFourmis.fourmi[0], deplace);
     ASSERT(egalCoord(coordFourmis(tabFourmis.fourmi[0]), deplace));
+    cout << "TEST FOURMI OK" << endl;
 }

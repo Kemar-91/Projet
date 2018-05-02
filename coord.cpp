@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <ctime>
 
 #include "Coord.hpp"
 
@@ -142,6 +143,7 @@ EnsCoord voisines(Coord c){
 }
 
 Coord choixCoordHasard(EnsCoord ec){
+    //srand(time(NULL));
     return ec.tab[rand() % (ec.nbElts + 1)];;
 }
 
@@ -197,17 +199,18 @@ void testCoord(){
 	EnsCoord test = exemple;
 	afficheEnsCoord(test);
 	supprimeEnsCoord(test, c2);
-	cout << test.nbElts << endl;
+	cout << endl << "Nombre element : " << test.nbElts << endl;
 	afficheEnsCoord(test);
 
 	cout << endl << endl;
 	Coord p;
 
 
-	//while(true){
+	while(exemple.nbElts > 0){
 		p = choixCoordHasard(exemple);
-		cout << "p = ";
 		afficheCoord(p);
-		cout << endl;
-	//}
+		supprimeEnsCoord(exemple, p);
+	}
+
+	cout << "TEST COORD OK" << endl;
 }

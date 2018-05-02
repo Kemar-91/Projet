@@ -62,6 +62,10 @@ void poserSucre(Place &p){
     p.sucre = true;
 }
 
+void enleveSucre(Place &p){
+    p.sucre = false;
+}
+
 void poserNid(Place &p){
     p.nid = true;
 }
@@ -157,4 +161,6 @@ void testPlace(){
     ASSERT(p.fourmi == 2);
     ASSERT(egalCoord(f.c, c));
 
+
+    cout << "TEST PLACE OK" << endl;
 }
